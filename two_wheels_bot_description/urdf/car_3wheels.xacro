@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Robot Constants -->
+  <xacro:property name="PI" value="3.14159" />
+  <xacro:property name="base_w" value="0.2" />
+  <xacro:property name="base_l" value="0.15" />
+  <xacro:property name="base_h" value="0.05" />
+  <xacro:property name="wheel_r" value="0.033" />
+  <xacro:property name="wheel_len" value="0.02" />
+  <xacro:property name="caster_r" value="0.015" />
+  <xacro:property name="z_offset" value="${wheel_r}" />
+  <xacro:property name="wheel_x_offset" value="-0.05" /> <!-- Wheels slightly back -->
+
+  <!-- Materials -->
+  <material name="CarBody">
+    <color rgba="0.2 0.2 0.8 1.0"/> <!-- Metallic Blue -->
+  </material>
+
+  <material name="WheelMaterial">
+    <color rgba="0.05 0.05 0.05 1.0"/> <!-- Dark Rubber -->
+  </material>
+
+  <material name="LidarGlass">
+    <color rgba="0.3 0.8 0.9 0.7"/> <!-- Transparent Lidar Glass -->
+  </material>
+
+  <material name="CasterMetal">
+    <color rgba="0.6 0.6 0.6 1.0"/> <!-- Steel -->
+  </material>
+
+  <!-- Base Footprint -->
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${wheel_r}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${base_h}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${base_w} ${base_l} ${base_h}"/>
+      </geometry>
+      <material name="CarBody"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${base_h * 0.5}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${base_w} ${base_l} ${base_h}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <origin xyz="0 0 ${base_h * 0.5}" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Lidar -->
+  <link name="lidar">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+      <material name="LidarGlass"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.000005" ixy="0" ixz="0" iyy="0.000005" iyz="0" izz="0.000005"/>
+    </inertial>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar"/>
+    <origin xyz="0 0 ${base_h + 0.02}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Left Wheel -->
+  <link name="left_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI * 0.5} 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_r}"/>
+      </geometry>
+      <material name="WheelMaterial"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI * 0.5} 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_r}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="${wheel_x_offset} ${base_w * 0.5} ${z_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Right Wheel -->
+  <link name="right_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI * 0.5} 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_r}"/>
+      </geometry>
+      <material name="WheelMaterial"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${PI * 0.5} 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_r}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="${wheel_x_offset} -${base_w * 0.5} ${z_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Frontal Caster Wheel -->
+  <link name="caster_frontal_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${caster_r}"/>
+      </geometry>
+      <material name="CasterMetal"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${caster_r}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+  </link>
+
+  <joint name="caster_frontal_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_frontal_wheel"/>
+    <origin xyz="${base_l * 0.5 - caster_r} 0 ${z_offset}" rpy="0 0 0"/>
+  </joint>
+
+</robot>
