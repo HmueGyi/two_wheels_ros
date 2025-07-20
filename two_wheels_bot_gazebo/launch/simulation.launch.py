@@ -14,12 +14,12 @@ def generate_launch_description():
     # Package directories
     gazebo_ros_pkg = get_package_share_directory('gazebo_ros')
     robot_desc_pkg = get_package_share_directory('two_wheels_bot_description')
-    farmbot_gazebo_pkg = get_package_share_directory('two_wheels_bot_gazebo')
+    robot_gazebo_pkg = get_package_share_directory('two_wheels_bot_gazebo')
 
     # Paths
-    empty_world = os.path.join(gazebo_ros_pkg, 'worlds', 'empty.world')
+    empty_world = os.path.join(robot_gazebo_pkg, 'worlds', 'empty_world.world')
     controller_config = os.path.join(robot_desc_pkg, 'config', 'my_controllers.yaml')
-    twist_mux_config = os.path.join(farmbot_gazebo_pkg, 'config', 'twist_mux.yaml')
+    twist_mux_config = os.path.join(robot_gazebo_pkg, 'config', 'twist_mux.yaml')
 
     # Launch args for robot spawn position
     x_pose_arg = DeclareLaunchArgument('x_pose', default_value='0.0', description='Robot initial X')

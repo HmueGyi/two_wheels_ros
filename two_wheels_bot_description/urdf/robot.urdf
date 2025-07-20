@@ -181,7 +181,7 @@
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
       <robot_param>robot_description</robot_param>
       <robot_param_node>robot_state_publisher</robot_param_node>
-      <parameters>/home/hmuegyi/Documents/2wheels_sim_ws/install/robot_description/share/robot_description/config/my_controllers.yaml</parameters>
+      <parameters>/home/hmuegyi/Documents/2wheels_sim_ws/install/two_wheels_bot_description/share/two_wheels_bot_description/config/my_controllers.yaml</parameters>
       <odometry_frame>odom</odometry_frame>
       <robot_base_frame>base_footprint</robot_base_frame>
       <publish_odom>true</publish_odom>
